@@ -1,0 +1,28 @@
+- name: Clone dotfiles repository
+  git:
+    repo: "{{ dotfiles_repo }}"
+    version: master
+    dest: "{{ dotfiles_repo_local_destination }}"
+    accept_hostkey: "{{ dotfiles_repo_accept_hostkey }}"
+  # ssh-agent doesn't allow key to pass through remote sudo commands.
+  become: no
+
+- name: Install dotfiles
+  shell: "{{ dotfiles_script }}"
+  changed_when: false
+
+- name: Install bash-it
+  git:
+    repo: git@github.com:Bash-it/bash-it.git
+    version: master
+    dest: ~/.bash_it/
+    accept_hostkey: true
+  become: no
+
+- name: Install tmux plugin manager
+  git:
+    repo: git@github.com:tmux-plugins/tpm.git
+    version: master
+    dest: ~/.tmux/plugin/tpm/
+    accept_hostkey: true
+  become: no
